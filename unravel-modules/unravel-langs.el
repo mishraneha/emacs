@@ -265,8 +265,8 @@
   :config
   (claude-code-mode))
 
-(use-package ai-code-interface
-  :ensure (:host github :repo "tninja/ai-code-interface.el")
+(use-package ai-code
+  :ensure (:host github :repo "tninja/ai-code-interface.el" :main "ai-code.el")
   :after (claude-code)
   :config
   (ai-code-set-backend  'claude-code-ide) ;; use claude-code-ide as backend
