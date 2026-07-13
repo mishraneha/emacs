@@ -335,58 +335,6 @@
           :immediate-finish t)
         org-capture-templates))
 
-;;;; Sales and CRM capture templates
-(use-package org-capture
-  :ensure nil
-  :config
-;;; Default definitions for variables used in capture templates
-  (when (not (boundp 'org-crm-file))
-    (defvar org-crm-file org-default-notes-file
-      "File in which CRM data is stored."))
-  (when (not (boundp 'org-sales-file))
-    (defvar org-sales-file org-default-notes-file
-      "File in which Sales Deal data is stored."))
-
-;;; *CRITICAL NOTE* Read before modifying the push stack below:
-  ;; Pushing to capture templates is a stack. What goes in first shows
-  ;; up at the bottom of the capture templates list.
-
-  (push '("s" "Sales and CRM templates") org-capture-templates)
-  (push `("sl" "New Sales Lead" entry
-          (file+headline org-sales-file "Leads to be Refiled")
-          (file ,(expand-file-name "capture-templates/sales.newlead.org" user-emacs-directory))
-          :prepend t
-          :kill-buffer t
-          :empty-lines-after 1
-          :clock-in t
-          :clock-resume t)
-        org-capture-templates)
-  (push `("sc" "New Company in CRM" entry
-          (file org-crm-file)
-          (file ,(expand-file-name "capture-templates/crm.newcompany.org" user-emacs-directory))
-          :prepend t
-          :clock-in t
-          :clock-resume t
-          :kill-buffer t
-          :empty-lines-after 1)
-        org-capture-templates)
-  (push `("sp" "New Person in CRM" entry
-          (file+headline org-crm-file "CRM to be Refiled")
-          (file ,(expand-file-name "capture-templates/crm.newperson.org" user-emacs-directory))
-          :prepend nil
-          :clock-in t
-          :clock-resume t
-          :empty-lines 1)
-        org-capture-templates)
-  (push `("sm" "Sales Related Meeting" entry
-          (file+headline org-sales-file "Sales to be Refiled")
-          (file ,(expand-file-name "capture-templates/sales.newmeeting.org" user-emacs-directory))
-          :prepend nil
-          :clock-in t
-          :clock-resume t
-          :empty-lines 1)
-        org-capture-templates))
-
 ;;; Ledger for personal finance management, plain-text accounting
 (use-package ledger-mode
   :ensure t)
@@ -408,7 +356,13 @@
   ;; ## Convert the Front-Matter from org to md format.
 
   (setq vm-base-dir (expand-file-name "~/Tresors/Documents/diary/notes/published"))
-  (setq vm-publishing-dir (expand-file-name "~/src/prototypes/vedang.me/v7/components/content/resources/content"))
+  (setq vm-publishing-dir (expand-file-name "~/src/vedang/vedang.me/vedang.me.root/components/content/resources/content"))
+
+  ;; Make `denote-publish-promote' (move a note into the published
+  ;; folder, adding the export slug) and `denote-publish-file' use the
+  ;; same directories as the org-publish project below.
+  (setq denote-publish-default-base-dir vm-base-dir)
+  (setq denote-publish-default-output-dir vm-publishing-dir)
 
   (setq org-publish-project-alist
         `(("vedangme" .
