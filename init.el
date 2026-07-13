@@ -71,6 +71,16 @@
   ;; Enable use-package :ensure support for Elpaca.
   (elpaca-use-package-mode))
 
+;; Emacs bundles an older Compat that lacks the newer backports (e.g.
+;; `set-local' from compat-31).  Built-ins such as `track-changes' and
+;; `diff-mode' `require' Compat early -- before Elpaca activates its
+;; newer Compat -- so the stale bundled copy provides the `compat'
+;; feature and permanently shadows the good one, leaving functions like
+;; `set-local' void (which breaks corfu/vertico, e.g. `project-find-file').
+;; Install and load Elpaca's Compat first, blocking, so it wins.
+(elpaca compat (require 'compat))
+(elpaca-wait)
+
 (defmacro prot-emacs-comment (&rest body)
   "Determine what to do with BODY.
 
